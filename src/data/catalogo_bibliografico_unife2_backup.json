@@ -1,0 +1,638 @@
+[
+  {
+    "id": "rec-mfn-75563",
+    "mfn": "75563",
+    "itemNumber": 1,
+    "materialType": "Libro impreso",
+    "title": "Naturaleza y paisaje en la Universidad Femenina del Sagrado Corazón",
+    "author": "De Orellana Rojas, Juan",
+    "year": 2026,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Fondo Editorial",
+    "pages": "202 p.",
+    "classification": "711.57/U42",
+    "descriptors": [
+      "PAISAJISMO",
+      "ARQUITECTURA SOSTENIBLE",
+      "BIODIVERSIDAD",
+      "CAMPUS UNIVERSITARIO",
+      "UNIFÉ"
+    ],
+    "barcode": "89301",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "89301",
+        "location": "Piso 1",
+        "callNumber": "711.57/U42",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "89301",
+        "location": "Piso 1",
+        "callNumber": "711.57/U42",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "indice": "Generalidades -- Naturaleza y sostenibilidad en la UNIFÉ -- Inventario de especies vegetales - sumidero de carbono",
+    "content": "Generalidades -- Naturaleza y sostenibilidad en la UNIFÉ -- Inventario de especies vegetales - sumidero de carbono",
+    "createdAt": "2026-02-10T10:00:00Z",
+    "updatedAt": "2026-02-10T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-75477",
+    "mfn": "75477",
+    "itemNumber": 2,
+    "materialType": "Tesis digital",
+    "title": "La garantía del plazo razonable en los procesos de divorcio: análisis jurídico y propuesta legislativa",
+    "author": "Salinas Zuzunaga, Lucia Cristina",
+    "year": 2026,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Escuela de Posgrado",
+    "pages": "PDF en línea",
+    "classification": "TD/346.0166/S18",
+    "descriptors": [
+      "Plazo legal",
+      "Divorcio",
+      "Legislación",
+      "Derecho--Tesis"
+    ],
+    "barcode": "",
+    "location": "Repositorio Digital",
+    "url": "https://hdl.handle.net/20.500.11955/1662",
+    "degree": "Tesis(Maestra)-- UNIFE. Escuela de Posgrado. Programa Académico de Maestría en Derecho Civil",
+    "advisor": "",
+    "indice": "",
+    "content": "",
+    "summary": "",
+    "createdAt": "2026-01-15T10:00:00Z",
+    "updatedAt": "2026-01-15T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-075810",
+    "mfn": "075810",
+    "itemNumber": 3,
+    "materialType": "Tesis digital",
+    "title": "Investigación de tesis con temas de mujer en la universidad de la mujer (1969 - 2023)",
+    "author": "Valdivia Cáceres, Marcela Sofía",
+    "year": 2024,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Escuela de Posgrado",
+    "pages": "240 p.",
+    "classification": "TD/305.4/V18",
+    "descriptors": [
+      "ESTUDIOS DE LA MUJER",
+      "GÉNERO",
+      "PRODUCCIÓN CIENTÍFICA",
+      "TESIS UNIVERSITARIAS",
+      "UNIFÉ"
+    ],
+    "barcode": "",
+    "location": "Repositorio Digital",
+    "url": "https://repositorio.unife.edu.pe/handle/20.500.11988/39820",
+    "degree": "Magíster en Educación con mención en Investigación y Docencia de la Educación Superior",
+    "advisor": "Dra. Huamán Rivas, Rosa",
+    "indice": "Capítulo I: Marco epistemológico de los estudios de género y mujer. Capítulo II: Análisis bibliométrico de la producción de tesis UNIFÉ (1969-2023). Capítulo III: Principales hallazgos, líneas temáticas y aportes institucionales.",
+    "content": "Capítulo I: Marco epistemológico de los estudios de género y mujer. Capítulo II: Análisis bibliométrico de la producción de tesis UNIFÉ (1969-2023). Capítulo III: Principales hallazgos, líneas temáticas y aportes institucionales.",
+    "summary": "Estudio documental y bibliométrico exhaustivo sobre la producción científica de tesis enfocadas en la mujer y género sustentadas en la UNIFÉ durante más de cinco décadas.",
+    "createdAt": "2024-11-20T10:00:00Z",
+    "updatedAt": "2024-11-20T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-74724",
+    "mfn": "74724",
+    "itemNumber": 4,
+    "materialType": "Test Psicológico",
+    "title": "Test integrado de evaluación de funciones ejecutivas y atención",
+    "author": "Ojeda Rúa, María del Carmen",
+    "year": 2023,
+    "city": "Madrid",
+    "publisher": "Club Universitario",
+    "pages": "123 p.",
+    "classification": "P/154.3/O384",
+    "descriptors": [
+      "Autismo en niños",
+      "Neuropsicología infantil",
+      "Pruebas psicológicas"
+    ],
+    "barcode": "88752",
+    "location": "Piso 2",
+    "copies": [
+      {
+        "barcode": "88752",
+        "location": "Piso 2",
+        "callNumber": "P/154.3/O384",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "97884127042",
+    "indice": "Justificación estadística -- Cuadernillo de aplicación -- Plantillas de corrección rápida.",
+    "content": "Justificación estadística -- Cuadernillo de aplicación -- Plantillas de corrección rápida.",
+    "summary": "Evaluación integral de las funciones ejecutivas y procesos cognitivos en niños de edad escolar.",
+    "createdAt": "2023-08-15T11:00:00Z",
+    "updatedAt": "2023-08-15T11:00:00Z"
+  },
+  {
+    "id": "rec-mfn-048912",
+    "mfn": "048912",
+    "itemNumber": 5,
+    "materialType": "Libro impreso",
+    "title": "Desarrollo humano y psicología de la adolescencia",
+    "author": "Rice, F. Philip",
+    "year": 2022,
+    "city": "México, D.F.",
+    "publisher": "Pearson Educación",
+    "pages": "688 p.",
+    "classification": "155.5/R24D",
+    "descriptors": [
+      "PSICOLOGÍA DE LA ADOLESCENCIA",
+      "DESARROLLO HUMANO",
+      "CONDUCTA ADOLESCENTE",
+      "PSICOLOGÍA EVOLUTIVA"
+    ],
+    "barcode": "38914",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "38914",
+        "location": "Piso 1",
+        "callNumber": "155.5/R24D",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "38915",
+        "location": "Piso 1",
+        "callNumber": "155.5/R24D",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-607-32-1548-3",
+    "indice": "1. Introducción al desarrollo humano. 2. Desarrollo físico y cognoscitivo en la adolescencia. 3. Desarrollo psicosocial y formación de la identidad. 4. Relaciones familiares y de pares en la juventud.",
+    "content": "1. Introducción al desarrollo humano. 2. Desarrollo físico y cognoscitivo en la adolescencia. 3. Desarrollo psicosocial y formación de la identidad. 4. Relaciones familiares y de pares en la juventud.",
+    "summary": "Estudio integral y actualizado sobre las etapas del ciclo vital con énfasis prioritario en la psicología de la adolescencia, desarrollo cognitivo y factores psicosociales.",
+    "createdAt": "2022-06-10T10:00:00Z",
+    "updatedAt": "2022-06-10T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-003401",
+    "mfn": "003401",
+    "itemNumber": 6,
+    "materialType": "Libro Posgrado",
+    "title": "Psicología organizacional contemporánea y gestión del talento humano en entidades públicas y privadas",
+    "author": "Chiavenato, Idalberto",
+    "year": 2022,
+    "city": "Bogotá",
+    "publisher": "McGraw-Hill Educación",
+    "pages": "488 p.",
+    "classification": "HF5549/C54",
+    "descriptors": [
+      "RECURSOS HUMANOS",
+      "COMPORTAMIENTO ORGANIZACIONAL",
+      "LIDERAZGO",
+      "GESTIÓN POR COMPETENCIAS"
+    ],
+    "barcode": "31044",
+    "location": "Piso 2",
+    "copies": [
+      {
+        "barcode": "31044",
+        "location": "Piso 2",
+        "callNumber": "HF5549/C54",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "31045",
+        "location": "Piso 1",
+        "callNumber": "HF5549/C54",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-958-41-0428-1",
+    "indice": "Parte 1: El nuevo rol de la administración de personas. Parte 2: Atracción e incorporación de talento. Parte 3: Diseño de puestos y evaluación del desempeño.",
+    "content": "Parte 1: El nuevo rol de la administración de personas. Parte 2: Atracción e incorporación de talento. Parte 3: Diseño de puestos y evaluación del desempeño.",
+    "summary": "Tratado completo sobre las dinámicas del capital humano en las organizaciones modernas, enfatizando el desarrollo de competencias y la psicología del trabajo.",
+    "createdAt": "2022-04-18T16:00:00Z",
+    "updatedAt": "2022-04-18T16:00:00Z"
+  },
+  {
+    "id": "rec-mfn-001089",
+    "mfn": "001089",
+    "itemNumber": 6,
+    "materialType": "Tesis digital",
+    "title": "Estrategias de desarrollo humano sostenible y responsabilidad social en comunidades del Perú",
+    "author": "Vargas Mendoza, Carmen Rosa",
+    "year": 2021,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Escuela de Posgrado",
+    "pages": "198 p.",
+    "classification": "332.15/S55",
+    "descriptors": [
+      "DERECHO CIVIL PATRIMONIAL",
+      "EMPRESARIAL Y RESPONSABILIDAD SOCIAL EMPRESARIAL",
+      "DESARROLLO SOSTENIBLE",
+      "GESTIÓN SOCIAL"
+    ],
+    "barcode": "",
+    "location": "Repositorio Digital",
+    "url": "https://repositorio.unife.edu.pe/handle/20.500.11988/38491",
+    "degree": "Magíster en Gestión del Desarrollo Humano (Tesis Mg. UNIFÉ)",
+    "indice": "Capítulo 1: Marco conceptual del desarrollo sostenible. Capítulo 2: Diagnóstico de impacto comunitario. Capítulo 3: Propuestas de gestión y sostenibilidad.",
+    "content": "Capítulo 1: Marco conceptual del desarrollo sostenible. Capítulo 2: Diagnóstico de impacto comunitario. Capítulo 3: Propuestas de gestión y sostenibilidad.",
+    "summary": "Análisis integral de los programas de responsabilidad social empresarial y su impacto en el desarrollo de capacidades humanas en zonas vulnerables.",
+    "createdAt": "2021-09-12T14:30:00Z",
+    "updatedAt": "2021-09-12T14:30:00Z"
+  },
+  {
+    "id": "rec-mfn-75312",
+    "mfn": "75312",
+    "itemNumber": 7,
+    "materialType": "Tesis digital",
+    "title": "Construcción y validación de una escala de memoria autobiográfica y emocional en adultos de Lima",
+    "author": "García Calderón, Lucía",
+    "year": 2021,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Facultad de Psicología y Humanidades",
+    "pages": "142 p.",
+    "classification": "TD/153.12/G24",
+    "descriptors": [
+      "MEMORIA AUTOBIOGRÁFICA",
+      "MEMORIA EMOCIONAL",
+      "ESCALAS DE MEDICIÓN",
+      "PSICOMETRÍA, ETC."
+    ],
+    "barcode": "",
+    "location": "Repositorio Digital",
+    "url": "https://hdl.handle.net/20.500.11955/1699",
+    "degree": "Licenciada en Psicología (Tesis Lic. UNIFÉ)",
+    "advisor": "Dra. Pérez Morales, Elena",
+    "indice": "Cap. 1: Fundamentación teórica de los sistemas de memoria. Cap. 2: Procedimiento psicométrico de validez y confiabilidad. Cap. 3: Baremo y normas de interpretación.",
+    "content": "Cap. 1: Fundamentación teórica de los sistemas de memoria. Cap. 2: Procedimiento psicométrico de validez y confiabilidad. Cap. 3: Baremo y normas de interpretación.",
+    "summary": "Propuesta psicométrica de evaluación de la memoria autobiográfica en población adulta de Lima Metropolitana con sólidos índices de confiabilidad.",
+    "createdAt": "2021-05-15T11:00:00Z",
+    "updatedAt": "2021-05-15T11:00:00Z"
+  },
+  {
+    "id": "rec-mfn-73048",
+    "mfn": "73048",
+    "itemNumber": 8,
+    "materialType": "Tesis impresa",
+    "title": "Centro de capacitación laboral para personas con discapacidad visual en Villa el Salvador",
+    "author": "Vega Baldeón, Geraldine Brighite",
+    "year": 2020,
+    "city": "Lima",
+    "publisher": "",
+    "pages": "227 h",
+    "classification": "T727.4/V37",
+    "descriptors": [
+      "CENTROS DE CAPACITACIÓN",
+      "DISCAPACIDAD VISUAL",
+      "ARQUITECTURA INCLUSIVA",
+      "VILLA EL SALVADOR",
+      "ACCESIBILIDAD"
+    ],
+    "barcode": "86825",
+    "location": "Piso1",
+    "copies": [
+      {
+        "barcode": "86825",
+        "location": "Piso1",
+        "callNumber": "T727.4/V37",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      }
+    ],
+    "degree": "Tesis (Arquitecta) -- UNIFÉ. Facultad de Arquitectura",
+    "url": "http://hdl.handle.net/20.500.11955/778",
+    "summary": "El tema de las personas con discapacidad, es algo que ya se ha venido tratando desde hace mucho tiempo a nivel mundial y nacional; en el transcurso de los años se ha visto un avance en el ámbito social y legal; se crearon organizaciones de ayuda y leyes para su beneficio. En el aspecto urbano y arquitectónico también se generaron cambios, hoy en día se diseñan espacios públicos y edificaciones accesibles.",
+    "createdAt": "2020-10-15T10:00:00Z",
+    "updatedAt": "2020-10-15T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-006520",
+    "mfn": "006520",
+    "itemNumber": 9,
+    "materialType": "Libro impreso",
+    "title": "Resúmenes de tesis = Thesis abstracts: [ 2015-2018]",
+    "author": "Universidad Femenina del Sagrado Corazón. Dirección General de Investigación",
+    "year": 2019,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Fondo Editorial",
+    "pages": "320 p.",
+    "classification": "REF/016.378/U58",
+    "descriptors": [
+      "TESIS - RESÚMENES",
+      "INVESTIGACIÓN CIENTÍFICA",
+      "BIBLIOGRAFÍAS",
+      "UNIFÉ",
+      "PRODUCCIÓN ACADÉMICA"
+    ],
+    "barcode": "49821",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "49821",
+        "location": "Piso 1",
+        "callNumber": "REF/016.378/U58",
+        "copyNumber": 1,
+        "publicNote": "Consulta en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "49822",
+        "location": "Piso 1",
+        "callNumber": "REF/016.378/U58",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-612-4034-18-2",
+    "indice": "Presentación institucional -- Resúmenes de tesis de Doctorado -- Resúmenes de tesis de Maestría -- Resúmenes de tesis de Licenciatura y Título Profesional -- Índices acumulativos de autores, asesores y materias.",
+    "content": "Presentación institucional -- Resúmenes de tesis de Doctorado -- Resúmenes de tesis de Maestría -- Resúmenes de tesis de Licenciatura y Título Profesional -- Índices acumulativos de autores, asesores y materias.",
+    "summary": "Publicación oficial en formato libro que recopila sistemáticamente los resúmenes y metadatos de las investigaciones de pregrado y posgrado sustentadas en la UNIFÉ entre los años 2015 y 2018.",
+    "createdAt": "2019-10-15T10:00:00Z",
+    "updatedAt": "2019-10-15T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-005120",
+    "mfn": "005120",
+    "itemNumber": 10,
+    "materialType": "Referencia",
+    "title": "Diccionario Enciclopédico de Psicología y Ciencias de la Educación",
+    "author": "Dorsch, Friedrich",
+    "year": 2019,
+    "city": "Barcelona",
+    "publisher": "Herder Editorial",
+    "pages": "1180 p.",
+    "classification": "REF/BF31/D67",
+    "descriptors": [
+      "DICCIONARIOS",
+      "ENCICLOPEDIAS",
+      "PSICOLOGÍA",
+      "TERMINOLOGÍA"
+    ],
+    "barcode": "43890",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "43890",
+        "location": "Piso 1",
+        "callNumber": "REF/BF31/D67",
+        "copyNumber": 1,
+        "publicNote": "Consulta exclusiva en sala",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-84-254-2180-8",
+    "indice": "Tomo 1: Vocabulario básico y definiciones técnicas. Tomo 2: Artículos temáticos y referencias cruzadas.",
+    "content": "Tomo 1: Vocabulario básico y definiciones técnicas. Tomo 2: Artículos temáticos y referencias cruzadas.",
+    "summary": "Compendio de términos y conceptos fundamentales de las ciencias psicológicas y pedagógicas.",
+    "createdAt": "2019-03-22T09:00:00Z",
+    "updatedAt": "2019-03-22T09:00:00Z"
+  },
+  {
+    "id": "rec-mfn-006521",
+    "mfn": "006521",
+    "itemNumber": 11,
+    "materialType": "Libro impreso",
+    "title": "El sentido del estilo: el sentido del estilo, la guía de escritura del pensador del siglo XXI",
+    "author": "Pinker, Steven",
+    "year": 2018,
+    "city": "Madrid",
+    "publisher": "Capitán Swing Libros",
+    "pages": "392 p.",
+    "classification": "P301/P56",
+    "descriptors": [
+      "ESCRITURA",
+      "REDACCIÓN CIENTÍFICA",
+      "LINGÜÍSTICA",
+      "ESTILO LITERARIO",
+      "COMUNICACIÓN"
+    ],
+    "barcode": "54201",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "54201",
+        "location": "Piso 1",
+        "callNumber": "P301/P56",
+        "copyNumber": 1,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-84-948832-5-5",
+    "indice": "1. El buen estilo en el siglo XXI. 2. Una ventana al mundo: la prosa transparente. 3. La maldición del conocimiento. 4. Redes de palabras y árboles de sintaxis. 5. Arcos de coherencia y claridad.",
+    "content": "1. El buen estilo en el siglo XXI. 2. Una ventana al mundo: la prosa transparente. 3. La maldición del conocimiento. 4. Redes de palabras y árboles de sintaxis. 5. Arcos de coherencia y claridad.",
+    "summary": "Una guía fundamental de redacción que combina lingüística moderna y ciencia cognitiva para enseñar el arte de escribir con elegancia, claridad y precisión.",
+    "createdAt": "2018-06-16T12:00:00Z",
+    "updatedAt": "2018-06-16T12:00:00Z"
+  },
+  {
+    "id": "rec-mfn-002154",
+    "mfn": "002154",
+    "itemNumber": 12,
+    "materialType": "Libro impreso",
+    "title": "Metodología de la investigación científica: enfoques cuantitativo, cualitativo y mixto",
+    "author": "Hernández Sampieri, Roberto; Fernández Collado, Carlos; Baptista Lucio, Pilar",
+    "year": 2018,
+    "city": "México, D.F.",
+    "publisher": "McGraw-Hill Interamericana",
+    "pages": "634 p.",
+    "classification": "Q180.55.M4/H47",
+    "descriptors": [
+      "METODOLOGÍA DE LA INVESTIGACIÓN",
+      "CIENCIA",
+      "ANÁLISIS DE DATOS",
+      "DISEÑO METODOLÓGICO, ETC."
+    ],
+    "barcode": "19402",
+    "location": "Piso 2",
+    "copies": [
+      {
+        "barcode": "19402",
+        "location": "Piso 2",
+        "callNumber": "Q180.55.M4/H47",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "19403",
+        "location": "Piso 1",
+        "callNumber": "Q180.55.M4/H47",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "31984",
+        "location": "Piso 1",
+        "callNumber": "Q180.55.M4/H47",
+        "copyNumber": 3,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-1-4562-2396-0",
+    "indice": "Cap. 1: Definiciones de los enfoques cuantitativo y cualitativo. Cap. 2: El proceso de la investigación cuantitativa. Cap. 3: Planteamiento del problema. Cap. 4: Desarrollo de la perspectiva teórica.",
+    "content": "Cap. 1: Definiciones de los enfoques cuantitativo y cualitativo. Cap. 2: El proceso de la investigación cuantitativa. Cap. 3: Planteamiento del problema. Cap. 4: Desarrollo de la perspectiva teórica.",
+    "summary": "Obra clásica de referencia metodológica que expone de forma didáctica las etapas y procesos de la investigación científica bajo los enfoques cuantitativo, cualitativo y mixto.",
+    "createdAt": "2018-01-05T09:15:00Z",
+    "updatedAt": "2018-01-05T09:15:00Z"
+  },
+  {
+    "id": "rec-mfn-001042",
+    "mfn": "001042",
+    "itemNumber": 13,
+    "materialType": "Tesis impresa",
+    "title": "Relación individuo-organización: efectos de la congruencia entre necesidades individuales y oportunidades laborales en una empresa industrial de Lima Metropolitana",
+    "author": "Gnecco Lombardi, Diannina Amedea María",
+    "year": 1985,
+    "city": "Lima",
+    "publisher": "UNIFÉ. Facultad de Psicología y Humanidades",
+    "pages": "267 h.",
+    "classification": "T106.58/G59",
+    "descriptors": [
+      "EMPRESAS INDUSTRIALES",
+      "NECESIDADES",
+      "OPORTUNIDADES DE EMPLEO",
+      "PSICOLOGÍA ORGANIZACIONAL",
+      "CLIMA LABORAL, ETC."
+    ],
+    "barcode": "27200",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "27200",
+        "location": "Piso 1",
+        "callNumber": "T106.58/G59",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "27201",
+        "location": "Piso 1",
+        "callNumber": "T106.58/G59",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "degree": "Licenciada en Psicología (Tesis Lic. UNIFÉ)",
+    "advisor": "Dr. Morales Rivera, Carlos",
+    "indice": "Cap. 1: Planteamiento del problema y marco teórico. Cap. 2: Metodología y diseño de investigación. Cap. 3: Análisis estadístico de resultados y discusión.",
+    "content": "Cap. 1: Planteamiento del problema y marco teórico. Cap. 2: Metodología y diseño de investigación. Cap. 3: Análisis estadístico de resultados y discusión.",
+    "summary": "Estudio enfocado en la relación existente entre necesidades individuales y oportunidades laborales en el sector industrial de Lima Metropolitana.",
+    "createdAt": "1985-11-10T10:00:00Z",
+    "updatedAt": "1985-11-10T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-034185",
+    "mfn": "034185",
+    "itemNumber": 14,
+    "materialType": "Libro impreso",
+    "title": "Evaluación psicológica: conceptos, métodos y estudio de casos",
+    "author": "Fernández-Ballesteros, Rocío",
+    "year": 2014,
+    "city": "Madrid",
+    "publisher": "Ediciones Pirámide",
+    "pages": "568 p.",
+    "classification": "150.287/F38",
+    "descriptors": [
+      "EVALUACIÓN PSICOLÓGICA",
+      "PSICODIAGNÓSTICO",
+      "TESTS PSICOLÓGICOS",
+      "PSICOMETRÍA",
+      "MÉTODOS DE EVALUACIÓN"
+    ],
+    "barcode": "41208",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "41208",
+        "location": "Piso 1",
+        "callNumber": "150.287/F38",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "41209",
+        "location": "Piso 1",
+        "callNumber": "150.287/F38",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-84-368-2564-4",
+    "indice": "1. Conceptos y modelos básicos en evaluación psicológica. 2. El proceso de evaluación como procedimiento científico. 3. Técnicas de auto-informe y observación. 4. Diagnóstico e informe psicológico.",
+    "content": "1. Conceptos y modelos básicos en evaluación psicológica. 2. El proceso de evaluación como procedimiento científico. 3. Técnicas de auto-informe y observación. 4. Diagnóstico e informe psicológico.",
+    "summary": "Manual de referencia en evaluación psicológica que aborda de manera rigurosa los fundamentos psicométricos, metodologías diagnósticas y análisis de casos clínicos.",
+    "createdAt": "2014-05-12T10:00:00Z",
+    "updatedAt": "2014-05-12T10:00:00Z"
+  },
+  {
+    "id": "rec-mfn-75601",
+    "mfn": "75601",
+    "itemNumber": 15,
+    "materialType": "Libro impreso",
+    "title": "Diseño y cálculo elástico de los sistemas estructurales : (teoría, problemas y programas) /",
+    "author": "Martínez Jiménez, José Miguel",
+    "year": 2023,
+    "city": "Madrid",
+    "publisher": "Bellisco Ediciones",
+    "pages": "412 p.",
+    "classification": "721.8/M26",
+    "descriptors": [
+      "SISTEMAS ESTRUCTURALES",
+      "CÁLCULO ELÁSTICO",
+      "ESTRUCTURAS",
+      "ARQUITECTURA",
+      "INGENIERÍA ESTRUCTURAL"
+    ],
+    "barcode": "58490",
+    "location": "Piso 1",
+    "copies": [
+      {
+        "barcode": "58490",
+        "location": "Piso 1",
+        "callNumber": "721.8/M26",
+        "copyNumber": 1,
+        "publicNote": "Lectura en sala",
+        "status": "Disponible"
+      },
+      {
+        "barcode": "58491",
+        "location": "Piso 1",
+        "callNumber": "721.8/M26",
+        "copyNumber": 2,
+        "publicNote": "Préstamo a domicilio",
+        "status": "Disponible"
+      }
+    ],
+    "isbn": "978-84-92970-85-8",
+    "indice": "1. Fundamentos de elasticidad y resistencia de materiales. 2. Métodos de cálculo matricial. 3. Sistemas aporticados y cerchas. 4. Aplicaciones computacionales y programas de cálculo.",
+    "content": "1. Fundamentos de elasticidad y resistencia de materiales. 2. Métodos de cálculo matricial. 3. Sistemas aporticados y cerchas. 4. Aplicaciones computacionales y programas de cálculo.",
+    "summary": "Tratado técnico y práctico orientado al diseño y dimensionamiento estructural de edificaciones con métodos elásticos y algoritmos computacionales.",
+    "createdAt": "2023-09-10T10:00:00Z",
+    "updatedAt": "2023-09-10T10:00:00Z"
+  }
+]

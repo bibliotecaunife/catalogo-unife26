@@ -1,0 +1,6 @@
+{
+  "name": "Catálogo Bibliográfico UNIFÉ & Conversor Excel a JSON",
+  "description": "Sistema de catálogo bibliográfico interactivo y gestor de base de datos con conversión de Excel a JSON, filtros de material y administración de registros.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
