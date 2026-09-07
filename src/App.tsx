@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
+import catalogoUrl from './data/catalogo_unife_52261_registros.json.gz?url';
 import { INITIAL_BIBLIOGRAPHIC_DATA } from './data/sampleDatabase';
 import {
   BibliographicRecord,
@@ -80,16 +81,36 @@ export default function App() {
 
   const itemsPerPage = isMobile ? 10 : ITEMS_PER_PAGE_DEFAULT;
 
-  // Load records from IndexedDB on initial mount
+  // Load records from IndexedDB or GZ on initial mount
   useEffect(() => {
     let isMounted = true;
     cleanupLegacyLocalStorage();
-    loadRecordsFromStorage().then((loaded) => {
-      if (isMounted && loaded && loaded.length > 0) {
-        setRecords(loaded);
-        setIsStorageLoaded(true);
+    
+    async function initData() {
+      try {
+        const loaded = await loadRecordsFromStorage();
+        if (isMounted && loaded && loaded.length > 0) {
+          setRecords(loaded);
+          setIsStorageLoaded(true);
+        } else {
+          // Extraer datos del archivo .gz comprimido
+          const response = await fetch(catalogoUrl);
+          const stream = response.body!.pipeThrough(new DecompressionStream('gzip'));
+          const texto = await new Response(stream).text();
+          const datosJson = JSON.parse(texto);
+          
+          if (isMounted) {
+            setRecords(datosJson);
+            setIsStorageLoaded(true);
+          }
+        }
+      } catch (err) {
+        console.error('Error al cargar datos iniciales:', err);
       }
-    });
+    }
+    
+    initData();
+    
     return () => {
       isMounted = false;
     };
@@ -812,35 +833,6 @@ export default function App() {
 
       {/* Floating Scroll to Top button */}
       <ScrollToTop />
-
-      {/* Modals */}
-      <ExcelUploadModal
-        isOpen={isExcelModalOpen}
-        onClose={() => setIsExcelModalOpen(false)}
-        onImportRecords={handleImportExcelRecords}
-        currentRecordsCount={activeRecords.length}
-      />
-
-      <JsonDatabaseModal
-        isOpen={isJsonModalOpen}
-        onClose={() => setIsJsonModalOpen(false)}
-        records={activeRecords}
-        onSaveJsonDatabase={handleSaveJsonDatabase}
-      />
-
-      <RecordModal
-        isOpen={isRecordModalOpen}
-        onClose={() => setIsRecordModalOpen(false)}
-        recordToEdit={recordToEdit}
-        onSave={handleSaveSingleRecord}
-        nextItemNumber={activeRecords.length + 1}
-      />
-
-      <SingleRecordJsonModal
-        isOpen={isSingleJsonModalOpen}
-        onClose={() => setIsSingleJsonModalOpen(false)}
-        record={recordToViewJson}
-      />
     </div>
   );
 }
