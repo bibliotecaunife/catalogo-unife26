@@ -89,23 +89,57 @@ export default function App() {
     async function initData() {
       try {
         const loaded = await loadRecordsFromStorage();
-        if (isMounted && loaded && loaded.length > 0) {
+        if (isMounted && loaded && loaded.length > 100) {
           setRecords(loaded);
           setIsStorageLoaded(true);
-        } else {
-          // Extraer datos del archivo .gz comprimido
+          return;
+        }
+
+        // Extraer datos del archivo .gz comprimido si no hay base completa guardada
+        try {
           const response = await fetch(catalogoUrl);
-          const stream = response.body!.pipeThrough(new DecompressionStream('gzip'));
-          const texto = await new Response(stream).text();
-          const datosJson = JSON.parse(texto);
-          
-          if (isMounted) {
-            setRecords(datosJson);
-            setIsStorageLoaded(true);
+          if (response.ok) {
+            const responseClone = response.clone();
+            let datosJson: BibliographicRecord[] | null = null;
+            try {
+              const stream = response.body!.pipeThrough(new DecompressionStream('gzip'));
+              const texto = await new Response(stream).text();
+              datosJson = JSON.parse(texto);
+            } catch {
+              // Si el navegador/servidor ya descomprimió la respuesta o falló la descompresión
+              try {
+                datosJson = await responseClone.json();
+              } catch {
+                const textoAlt = await responseClone.text();
+                datosJson = JSON.parse(textoAlt);
+              }
+            }
+
+            if (isMounted && datosJson && Array.isArray(datosJson) && datosJson.length > 0) {
+              setRecords(datosJson);
+              setIsStorageLoaded(true);
+              return;
+            }
+          }
+        } catch (fetchErr: any) {
+          if (fetchErr?.name !== 'AbortError') {
+            console.warn('No se pudo extraer el archivo .gz de catálogo, usando datos precargados:', fetchErr);
           }
         }
-      } catch (err) {
-        console.error('Error al cargar datos iniciales:', err);
+
+        if (isMounted) {
+          if (loaded && loaded.length > 0) {
+            setRecords(loaded);
+          }
+          setIsStorageLoaded(true);
+        }
+      } catch (err: any) {
+        if (isMounted && err?.name !== 'AbortError') {
+          console.warn('Aviso al cargar datos iniciales:', err);
+        }
+        if (isMounted) {
+          setIsStorageLoaded(true);
+        }
       }
     }
     
@@ -141,6 +175,7 @@ export default function App() {
   const [isSingleJsonModalOpen, setIsSingleJsonModalOpen] = useState<boolean>(false);
   const [recordToEdit, setRecordToEdit] = useState<BibliographicRecord | null>(null);
   const [recordToViewJson, setRecordToViewJson] = useState<BibliographicRecord | null>(null);
+  const [notification, setNotification] = useState<string | null>(null);
 
   // Ensure active records strictly map to the 6 official types
   const activeRecords = useMemo(() => {
@@ -392,6 +427,9 @@ export default function App() {
         return Array.from(existingMap.values());
       });
     }
+
+    setNotification(`¡Importación exitosa! Se procesaron ${cleanRecords.length} registros bibliográficos.`);
+    setTimeout(() => setNotification(null), 6000);
   };
 
   const handleSaveJsonDatabase = (updatedRecords: BibliographicRecord[]) => {
@@ -508,11 +546,22 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f3f4f6] text-gray-900 flex flex-col font-sans selection:bg-emerald-200 selection:text-emerald-900">
+    <div className="min-h-screen bg-[#f3f4f6] text-gray-900 flex flex-col font-sans selection:bg-emerald-200 selection:text-emerald-900 relative">
+      {notification && (
+        <div className="fixed top-4 right-4 z-50 bg-[#00a651] text-white px-5 py-3 rounded-xl shadow-2xl font-semibold flex items-center gap-3 animate-bounce border border-emerald-300">
+          <span>{notification}</span>
+          <button
+            onClick={() => setNotification(null)}
+            className="text-white/80 hover:text-white font-bold text-lg leading-none ml-2"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* 1. Header with UNIFÉ seal and title */}
       <Header
         totalRecords={activeRecords.length}
-        onOpenExcelModal={() => setIsExcelModalOpen(true)}
       />
 
       {/* 2. Material Categories Filter Carousel (Excluding Libro Digital & Revista Impresa) */}
@@ -621,15 +670,6 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsExcelModalOpen(true)}
-              className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] sm:text-[13px] font-bold px-3 py-1.5 rounded-lg shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-              title="Importar o reemplazar catálogo con archivo Excel (.xlsx)"
-            >
-              <Upload className="w-4 h-4 text-[#00a651] shrink-0" />
-              <span>Importar Excel</span>
-            </button>
-
             <button
               onClick={handleExportToExcel}
               className="bg-[#00a651] hover:bg-[#008c44] text-white text-[11px] sm:text-[13px] font-bold px-3 py-1.5 rounded-lg shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"

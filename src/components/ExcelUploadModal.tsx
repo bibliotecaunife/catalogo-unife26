@@ -74,7 +74,7 @@ export const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
     try {
       const result = await readExcelFile(selectedFile);
       if (result.sheets.length === 0 || result.sheets.every((s) => s.rows.length === 0)) {
-        throw new Error('El archivo Excel no contiene filas o datos legibles.');
+        throw new Error('El archivo no contiene filas o datos legibles.');
       }
       setFile(selectedFile);
       setParseResult(result);
@@ -82,9 +82,12 @@ export const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
       setSelectedSheetName(defaultSheet.sheetName);
 
       const mapping = autoDetectColumnMapping(defaultSheet.headers);
+      if (!mapping.title && defaultSheet.headers.length > 0) {
+        mapping.title = defaultSheet.headers[0];
+      }
       setColumnMapping(mapping);
     } catch (err: any) {
-      setError(err?.message || 'Error al procesar el archivo Excel. Verifica el formato.');
+      setError(err?.message || 'Error al procesar el archivo. Verifica el formato (.xlsx, .xls, .csv, .json).');
       setParseResult(null);
     } finally {
       setLoading(false);
@@ -110,6 +113,9 @@ export const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
     const sheet = parseResult?.sheets.find((s) => s.sheetName === sheetName);
     if (sheet) {
       const mapping = autoDetectColumnMapping(sheet.headers);
+      if (!mapping.title && sheet.headers.length > 0) {
+        mapping.title = sheet.headers[0];
+      }
       setColumnMapping(mapping);
     }
   };
@@ -126,12 +132,27 @@ export const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
     ? convertRowsToRecords(currentSheet.rows.slice(0, 10), columnMapping, 1)
     : [];
 
-  const handleConfirmImport = () => {
+  const handleConfirmImport = async () => {
     if (!currentSheet || currentSheet.rows.length === 0) return;
-    const startNum = replaceMode ? 1 : currentRecordsCount + 1;
-    const allRecords = convertRowsToRecords(currentSheet.rows, columnMapping, startNum);
-    onImportRecords(allRecords, replaceMode);
-    onClose();
+    setLoading(true);
+    setError(null);
+
+    // Yield to UI thread so spinner renders
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
+    try {
+      const startNum = replaceMode ? 1 : currentRecordsCount + 1;
+      const allRecords = convertRowsToRecords(currentSheet.rows, columnMapping, startNum);
+      if (!allRecords || allRecords.length === 0) {
+        throw new Error('No se pudieron extraer registros válidos del archivo.');
+      }
+      onImportRecords(allRecords, replaceMode);
+      onClose();
+    } catch (err: any) {
+      setError(err?.message || 'Error al guardar los registros en el catálogo.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -180,7 +201,7 @@ export const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
             <input
               ref={fileInputRef}
               type="file"
-              accept=".xlsx, .xls, .csv"
+              accept=".xlsx, .xls, .csv, .json, .ods"
               onChange={handleFileChange}
               className="hidden"
             />
@@ -202,7 +223,7 @@ export const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
                   </p>
                 ) : (
                   <p className="font-semibold text-gray-700">
-                    Arrastra y suelta tu archivo <span className="text-[#00a651]">.xlsx, .xls o .csv</span> aquí, o haz clic para explorar
+                    Arrastra y suelta tu archivo <span className="text-[#00a651]">.xlsx, .xls, .csv o .json</span> aquí, o haz clic para explorar
                   </p>
                 )}
                 <p className="text-xs text-gray-500 mt-0.5">

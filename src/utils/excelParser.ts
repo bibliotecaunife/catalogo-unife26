@@ -662,8 +662,44 @@ export function autoDetectColumnMapping(headers: string[]): ColumnMapping {
  * Reads an Excel (.xlsx, .xls, .csv) file with multi-row and dirty header resilience
  */
 export async function readExcelFile(file: File): Promise<ParseExcelResult> {
+  const fileNameLower = file.name.toLowerCase();
+
+  // If user dropped or selected a .json file directly
+  if (fileNameLower.endsWith('.json')) {
+    const text = await file.text();
+    const jsonParsed = JSON.parse(text);
+    const recordsArray = Array.isArray(jsonParsed) ? jsonParsed : [jsonParsed];
+
+    const firstItem = recordsArray[0] || {};
+    const headers = Object.keys(firstItem);
+
+    return {
+      fileName: file.name,
+      sheets: [
+        {
+          sheetName: 'JSON_Base',
+          headers,
+          rows: recordsArray,
+          totalRows: recordsArray.length,
+        },
+      ],
+      defaultSheet: 'JSON_Base',
+    };
+  }
+
   const arrayBuffer = await file.arrayBuffer();
-  const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+  let workbook: XLSX.WorkBook;
+
+  try {
+    workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+  } catch {
+    try {
+      workbook = XLSX.read(arrayBuffer, { type: 'array', raw: true });
+    } catch {
+      const textData = await file.text();
+      workbook = XLSX.read(textData, { type: 'string' });
+    }
+  }
 
   const sheets: ParsedSheetData[] = [];
 
@@ -688,11 +724,11 @@ export async function readExcelFile(file: File): Promise<ParseExcelResult> {
       continue;
     }
 
-    // Heuristic: Find the header row index (scanning first 10 rows)
+    // Heuristic: Find the header row index (scanning first 15 rows)
     let headerRowIdx = 0;
     let bestScore = -1;
 
-    const maxScanRows = Math.min(sheetMatrix.length, 10);
+    const maxScanRows = Math.min(sheetMatrix.length, 15);
     for (let r = 0; r < maxScanRows; r++) {
       const row = sheetMatrix[r];
       if (!Array.isArray(row) || row.length === 0) continue;
@@ -707,19 +743,20 @@ export async function readExcelFile(file: File): Promise<ParseExcelResult> {
           const norm = normalizeHeaderKey(cellStr);
           // Check if matches any known bibliographic keywords
           const isKnownKeyword = Object.values(FIELD_CANDIDATES).some((cands) =>
-            cands.some((c) => norm === normalizeHeaderKey(c) || (norm.length > 3 && norm.includes(normalizeHeaderKey(c))))
+            cands.some((c) => norm === normalizeHeaderKey(c) || (norm.length > 2 && norm.includes(normalizeHeaderKey(c))))
           );
           if (isKnownKeyword) {
-            score += 5;
+            score += 10;
           }
         }
       }
 
-      if (nonEmptyCells >= 2) {
-        score += nonEmptyCells;
+      // Single-cell rows (like title banners "CATALOGO GENERAL") should be penalized
+      if (nonEmptyCells > 1) {
+        score += nonEmptyCells * 2;
       }
 
-      if (score > bestScore) {
+      if (score > bestScore && nonEmptyCells > 0) {
         bestScore = score;
         headerRowIdx = r;
       }
@@ -776,7 +813,7 @@ export async function readExcelFile(file: File): Promise<ParseExcelResult> {
   return {
     fileName: file.name,
     sheets,
-    defaultSheet: workbook.SheetNames[0] || '',
+    defaultSheet: workbook.SheetNames[0] || 'JSON_Base',
   };
 }
 
@@ -797,7 +834,17 @@ export function convertRowsToRecords(
   const getRowValue = (row: Record<string, any>, mappedCol?: string): string => {
     if (!row || typeof row !== 'object') return '';
     if (mappedCol && row[mappedCol] !== undefined && row[mappedCol] !== null) {
-      return String(row[mappedCol]).trim();
+      const val = String(row[mappedCol]).trim();
+      if (val) return val;
+    }
+    if (mappedCol) {
+      const normMapped = normalizeHeaderKey(mappedCol);
+      for (const k of Object.keys(row)) {
+        if (normalizeHeaderKey(k) === normMapped) {
+          const val = row[k];
+          if (val !== undefined && val !== null) return String(val).trim();
+        }
+      }
     }
     return '';
   };

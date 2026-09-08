@@ -1,3 +1,4 @@
+import gzDataUrl from '../data/catalogo_unife_52261_registros.json.gz?url';
 import { BibliographicRecord } from '../types';
 import { INITIAL_BIBLIOGRAPHIC_DATA } from '../data/sampleDatabase';
 import { mapToOfficialMaterialType, normalizeDescriptorsList } from './excelParser';
@@ -8,8 +9,18 @@ const DB_VERSION = 1;
 const LOCAL_STORAGE_KEY = 'unife_bibliographic_db_v2';
 const LEGACY_STORAGE_KEY = 'unife_bibliographic_db';
 
+/**
+ * Descomprime un ArrayBuffer gzip usando DecompressionStream nativo del navegador
+ */
+async function decompressGzip(arrayBuffer: ArrayBuffer): Promise<string> {
+  const stream = new Blob([arrayBuffer])
+    .stream()
+    .pipeThrough(new DecompressionStream('gzip'));
+  const decompressedArrayBuffer = await new Response(stream).arrayBuffer();
+  return new TextDecoder().decode(decompressedArrayBuffer);
+}
+
 function sanitizeLoadedRecords(records: BibliographicRecord[]): BibliographicRecord[] {
-  // Benchmark records to ensure are always present and up-to-date with complete content & metadata
   const canonicalMap: Array<{
     match: (title: string, mfn?: string | number) => boolean;
     canonical: BibliographicRecord;
@@ -40,7 +51,6 @@ function sanitizeLoadedRecords(records: BibliographicRecord[]): BibliographicRec
   const handledCanonicalIds = new Set<string>();
   const processedRecords: BibliographicRecord[] = [];
 
-  // 1. Process existing records from storage, updating canonical ones and removing duplicate canonicals
   records.forEach((r) => {
     const title = r.title || '';
     const foundCanonical = canonicalMap.find((c) => c.match(title, r.mfn));
@@ -49,14 +59,11 @@ function sanitizeLoadedRecords(records: BibliographicRecord[]): BibliographicRec
       const canonicalId = foundCanonical.canonical.id;
       if (!handledCanonicalIds.has(canonicalId)) {
         handledCanonicalIds.add(canonicalId);
-        // Take canonical data directly to guarantee 100% faithful representation
         processedRecords.push({
           ...foundCanonical.canonical,
         });
       }
-      // If already handled, skip duplicate
     } else {
-      // Non-canonical custom record from user import: normalize it
       let parsedYear = typeof r.year === 'number' ? r.year : parseInt(String(r.year || '0'), 10) || 0;
       const officialType = mapToOfficialMaterialType(r.materialType, r.classification, r.title, r.degree, r.url, r.marc502);
       const isDigital = officialType === 'Tesis digital';
@@ -75,7 +82,6 @@ function sanitizeLoadedRecords(records: BibliographicRecord[]): BibliographicRec
     }
   });
 
-  // 2. Ensure all canonical initial records are included if they weren't in storage
   INITIAL_BIBLIOGRAPHIC_DATA.forEach((initRec) => {
     if (!handledCanonicalIds.has(initRec.id)) {
       processedRecords.push(initRec);
@@ -83,7 +89,6 @@ function sanitizeLoadedRecords(records: BibliographicRecord[]): BibliographicRec
     }
   });
 
-  // Sort strictly by year descending (most recent first)
   processedRecords.sort((a, b) => {
     const yearA = Number(a.year || 0);
     const yearB = Number(b.year || 0);
@@ -94,9 +99,6 @@ function sanitizeLoadedRecords(records: BibliographicRecord[]): BibliographicRec
   return processedRecords;
 }
 
-/**
- * Open IndexedDB connection safely
- */
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     if (typeof window === 'undefined' || !window.indexedDB) {
@@ -123,9 +125,6 @@ function openDatabase(): Promise<IDBDatabase> {
   });
 }
 
-/**
- * Clean up legacy localStorage items that exceed 5MB quota
- */
 export function cleanupLegacyLocalStorage(): void {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -137,10 +136,6 @@ export function cleanupLegacyLocalStorage(): void {
   }
 }
 
-/**
- * Load all bibliographic records from IndexedDB.
- * Falls back to localStorage migration or initial sample data.
- */
 export async function loadRecordsFromStorage(): Promise<BibliographicRecord[]> {
   try {
     const db = await openDatabase();
@@ -164,13 +159,11 @@ export async function loadRecordsFromStorage(): Promise<BibliographicRecord[]> {
     });
 
     if (records.length > 0) {
-      // Return stored records and persist sanitized version
       const cleanRecords = sanitizeLoadedRecords(records);
       await saveRecordsToStorage(cleanRecords);
       return cleanRecords;
     }
 
-    // If IndexedDB is empty, check if we have data in localStorage to migrate
     if (typeof window !== 'undefined' && window.localStorage) {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
       if (saved) {
@@ -185,7 +178,6 @@ export async function loadRecordsFromStorage(): Promise<BibliographicRecord[]> {
                   r.materialType !== 'Revista impresa'
               )
             );
-            // Save to IndexedDB and clear localStorage to prevent quota errors
             await saveRecordsToStorage(clean);
             cleanupLegacyLocalStorage();
             return clean;
@@ -196,21 +188,30 @@ export async function loadRecordsFromStorage(): Promise<BibliographicRecord[]> {
       }
     }
 
-    // Default to INITIAL_BIBLIOGRAPHIC_DATA
-    const initialClean = sanitizeLoadedRecords(INITIAL_BIBLIOGRAPHIC_DATA);
-    await saveRecordsToStorage(initialClean);
-    return initialClean;
+    // CARGA AUTOMÁTICA DEL ARCHIVO .GZ USANDO API NATIVA
+    try {
+      const response = await fetch(gzDataUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      const decompressedString = await decompressGzip(arrayBuffer);
+      const gzRecords: BibliographicRecord[] = JSON.parse(decompressedString);
+
+      if (Array.isArray(gzRecords) && gzRecords.length > 0) {
+        const cleanGzRecords = sanitizeLoadedRecords(gzRecords);
+        await saveRecordsToStorage(cleanGzRecords);
+        return cleanGzRecords;
+      }
+    } catch (gzError) {
+      console.error('Error al descomprimir con API nativa:', gzError);
+    }
+
+    return INITIAL_BIBLIOGRAPHIC_DATA;
   } catch (err) {
-    console.warn('Falling back from IndexedDB to initial dataset:', err);
-    return sanitizeLoadedRecords(INITIAL_BIBLIOGRAPHIC_DATA);
+    console.warn('Falling back to initial dataset:', err);
+    return INITIAL_BIBLIOGRAPHIC_DATA;
   }
 }
 
-/**
- * Save records array into IndexedDB with full transactional replace
- */
 export async function saveRecordsToStorage(records: BibliographicRecord[]): Promise<void> {
-  // Always clean up localStorage to ensure no quota exceeded exception occurs
   cleanupLegacyLocalStorage();
 
   try {
@@ -219,7 +220,7 @@ export async function saveRecordsToStorage(records: BibliographicRecord[]): Prom
       const tx = db.transaction(STORE_NAME, 'readwrite');
       const store = tx.objectStore(STORE_NAME);
 
-      store.clear(); // clear previous records
+      store.clear();
 
       records.forEach((record) => {
         store.put(record);

@@ -16,15 +16,6 @@ export const Header: React.FC<HeaderProps> = ({ totalRecords, onOpenExcelModal }
             Universidad Femenina del Sagrado Corazón:{' '}
             <strong className="text-white font-bold">{totalRecords.toLocaleString('es-PE')}</strong> registros
           </div>
-          {onOpenExcelModal && (
-            <button
-              onClick={onOpenExcelModal}
-              className="text-[10px] sm:text-[11px] text-emerald-100 hover:text-white underline hover:font-bold cursor-pointer transition-colors"
-              title="Cargar archivo Excel para actualizar la base de datos"
-            >
-              Cargar base de datos Excel
-            </button>
-          )}
         </div>
       </div>
 

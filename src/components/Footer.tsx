@@ -56,12 +56,8 @@ export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }
             </span>
           </div>
 
-          {/* Badge 2: Títulos en catálogo (Permite abrir el importador de Excel de forma interna al hacer clic) */}
-          <button
-            onClick={onOpenExcelModal}
-            className="inline-flex items-center gap-2 bg-[#008742]/90 hover:bg-[#007338] px-3.5 py-1.5 rounded-lg border border-white/25 shadow-xs transition-colors cursor-pointer text-left"
-            title="Clic para importar o actualizar la base de datos desde un archivo Excel"
-          >
+          {/* Badge 2: Títulos en catálogo */}
+          <div className="inline-flex items-center gap-2 bg-[#008742]/90 px-3.5 py-1.5 rounded-lg border border-white/25 shadow-xs">
             <BookOpen className="w-4 h-4 text-[#fde047] shrink-0 stroke-[2.2]" />
             <span className="text-xs sm:text-sm font-medium text-white">
               Títulos en catálogo:
@@ -69,7 +65,7 @@ export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }
             <span className="font-mono font-bold text-xs sm:text-sm text-white tracking-wider">
               {totalRecords.toLocaleString('es-PE')}
             </span>
-          </button>
+          </div>
         </div>
       </div>
     </footer>
