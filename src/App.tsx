@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
 import catalogoUrl from './data/catalogo_unife_52261_registros.json.gz?url';
-const [records, setRecords] = useState<BibliographicRecord[]>([]);
+import { INITIAL_BIBLIOGRAPHIC_DATA } from './data/sampleDatabase';
 import {
   BibliographicRecord,
   DEFAULT_MATERIAL_TYPES,
