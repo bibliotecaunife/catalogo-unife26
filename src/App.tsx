@@ -5,7 +5,6 @@
 
 import React, { useState, useEffect, useMemo, useDeferredValue } from 'react';
 import catalogoUrl from './data/catalogo_unife_52261_registros.json.gz?url';
-import { INITIAL_BIBLIOGRAPHIC_DATA } from './data/sampleDatabase';
 import {
   BibliographicRecord,
   DEFAULT_MATERIAL_TYPES,
@@ -61,7 +60,7 @@ import {
 const ITEMS_PER_PAGE_DEFAULT = 40;
 
 export default function App() {
-  const [records, setRecords] = useState<BibliographicRecord[]>(INITIAL_BIBLIOGRAPHIC_DATA);
+  const [records, setRecords] = useState<BibliographicRecord[]>([]);
   const [isStorageLoaded, setIsStorageLoaded] = useState<boolean>(false);
   const [selectedRecordIds, setSelectedRecordIds] = useState<Set<string>>(new Set());
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
