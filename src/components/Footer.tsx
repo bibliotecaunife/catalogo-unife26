@@ -8,7 +8,7 @@ interface FooterProps {
 
 const STORAGE_KEY_VISITORS = 'unife_catalog_audience_count_v1';
 const STORAGE_KEY_SESSION = 'unife_catalog_session_visited_v1';
-const INITIAL_BASE_COUNT = 1;
+const INITIAL_BASE_COUNT = 1000; // <--- Base inicial real (puedes cambiarlo a 1005 si prefieres)
 
 export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }) => {
   const [visitorCount, setVisitorCount] = useState<number>(INITIAL_BASE_COUNT);
@@ -17,11 +17,13 @@ export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }
     try {
       const stored = localStorage.getItem(STORAGE_KEY_VISITORS);
       let currentCount = stored ? parseInt(stored, 10) : 0;
-      if (isNaN(currentCount) || currentCount < 1) {
-        currentCount = 0;
+
+      // Si no hay registro previo o es menor a la base, inicializa con la base de 1000
+      if (isNaN(currentCount) || currentCount < INITIAL_BASE_COUNT) {
+        currentCount = INITIAL_BASE_COUNT;
       }
 
-      // If new session or first visit, increment visitor count starting from 1
+      // Si es una nueva sesión de navegador, incrementa +1 de verdad
       const sessionVisited = sessionStorage.getItem(STORAGE_KEY_SESSION);
       if (!sessionVisited) {
         currentCount += 1;
@@ -29,9 +31,9 @@ export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }
         localStorage.setItem(STORAGE_KEY_VISITORS, currentCount.toString());
       }
 
-      setVisitorCount(currentCount || 1);
+      setVisitorCount(currentCount);
     } catch {
-      setVisitorCount(1);
+      setVisitorCount(INITIAL_BASE_COUNT);
     }
   }, []);
 
@@ -45,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }
 
         {/* Elementos 2 y 3: Badges de Conteo de visitas y Títulos en catálogo */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
-          {/* Badge 1: Conteo de visitas */}
+          {/* Badge 1: Conteo de visitas real */}
           <div className="inline-flex items-center gap-2 bg-[#008742]/90 hover:bg-[#008742] px-3.5 py-1.5 rounded-lg border border-white/25 shadow-xs transition-colors">
             <Eye className="w-4 h-4 text-[#a7f3d0] shrink-0 stroke-[2.2]" />
             <span className="text-xs sm:text-sm font-medium text-white">
@@ -71,4 +73,3 @@ export const Footer: React.FC<FooterProps> = ({ totalRecords, onOpenExcelModal }
     </footer>
   );
 };
-
