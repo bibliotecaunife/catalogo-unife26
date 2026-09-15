@@ -57,15 +57,16 @@ import {
   Upload,
 } from 'lucide-react';
 
-const ITEMS_PER_PAGE_DEFAULT = 40;
+const ITEMS_PER_PAGE_DEFAULT = 30; // <--- Cambiado a 30 por página en PC
 
 export default function App() {
   const [records, setRecords] = useState<BibliographicRecord[]>([]);
   const [isStorageLoaded, setIsStorageLoaded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedRecordIds, setSelectedRecordIds] = useState<Set<string>>(new Set());
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
 
-  // Responsive device check: 40 on desktop/PC, 10 on mobile
+  // Responsive device check: 30 on desktop/PC, 10 on mobile
   const [isMobile, setIsMobile] = useState<boolean>(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -91,10 +92,10 @@ export default function App() {
         if (isMounted && loaded && loaded.length > 100) {
           setRecords(loaded);
           setIsStorageLoaded(true);
+          setIsLoading(false);
           return;
         }
 
-        // Extraer datos del archivo .gz comprimido si no hay base completa guardada
         try {
           const response = await fetch(catalogoUrl);
           if (response.ok) {
@@ -105,7 +106,6 @@ export default function App() {
               const texto = await new Response(stream).text();
               datosJson = JSON.parse(texto);
             } catch {
-              // Si el navegador/servidor ya descomprimió la respuesta o falló la descompresión
               try {
                 datosJson = await responseClone.json();
               } catch {
@@ -117,6 +117,7 @@ export default function App() {
             if (isMounted && datosJson && Array.isArray(datosJson) && datosJson.length > 0) {
               setRecords(datosJson);
               setIsStorageLoaded(true);
+              setIsLoading(false);
               return;
             }
           }
@@ -131,6 +132,7 @@ export default function App() {
             setRecords(loaded);
           }
           setIsStorageLoaded(true);
+          setIsLoading(false);
         }
       } catch (err: any) {
         if (isMounted && err?.name !== 'AbortError') {
@@ -138,6 +140,7 @@ export default function App() {
         }
         if (isMounted) {
           setIsStorageLoaded(true);
+          setIsLoading(false);
         }
       }
     }
@@ -176,7 +179,6 @@ export default function App() {
   const [recordToViewJson, setRecordToViewJson] = useState<BibliographicRecord | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
 
-  // Ensure active records strictly map to the 6 official types
   const activeRecords = useMemo(() => {
     return records.map((r) => {
       const strictType = mapToOfficialMaterialType(r.materialType, r.classification, r.title, r.degree, r.url, r.marc502);
@@ -187,12 +189,10 @@ export default function App() {
     });
   }, [records]);
 
-  // The 6 official item types strictly defined as tabs and active filters
   const availableCategories = useMemo(() => {
     return Array.from(DEFAULT_MATERIAL_TYPES);
   }, []);
 
-  // Count items per official category strictly
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { TODOS: activeRecords.length, Todos: activeRecords.length };
     OFFICIAL_MATERIAL_TYPES.forEach((type) => {
@@ -207,7 +207,6 @@ export default function App() {
     return counts;
   }, [activeRecords]);
 
-  // Available unique years for filter dropdowns strictly 2026 to 2016
   const availableYears = useMemo(() => {
     const years: number[] = [];
     for (let y = 2026; y >= 2016; y--) {
@@ -216,36 +215,29 @@ export default function App() {
     return years;
   }, []);
 
-  // Total physical copies count across all records
   const totalCopiesCount = useMemo(() => {
     return activeRecords.reduce((acc, r) => acc + (r.copies?.length || 1), 0);
   }, [activeRecords]);
 
-  // Deferred search term to guarantee 100% lag-free typing in input
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
-  // High-performance search & compiled query evaluation
   const compiledQuery = useMemo(() => {
     return compileSearchQuery(deferredSearchTerm, searchScope);
   }, [deferredSearchTerm, searchScope]);
 
-  // Evaluated and filtered records
   const searchEvaluatedRecords = useMemo(() => {
     const isCategoryTodos = selectedCategory.toUpperCase() === 'TODOS';
 
     return activeRecords
       .map((rec): SearchMatchResult | null => {
-        // 1. Material Type filter
         if (!isCategoryTodos && rec.materialType !== selectedCategory) {
           return null;
         }
 
-        // 2. Year filter
         if (selectedYear && String(rec.year) !== String(selectedYear)) {
           return null;
         }
 
-        // 3. Descriptor tag filter
         if (selectedDescriptor) {
           const normDesc = selectedDescriptor.toLowerCase().trim();
           const hasDesc = rec.descriptors?.some(
@@ -254,7 +246,6 @@ export default function App() {
           if (!hasDesc) return null;
         }
 
-        // 4. Intelligent Semantic Search Evaluation (ultra-fast compiled)
         const evalResult = evaluateRecordSearchCompiled(rec, compiledQuery);
         if (!evalResult.isMatch) {
           return null;
@@ -271,8 +262,6 @@ export default function App() {
     selectedDescriptor,
   ]);
 
-  // Automatic cross-category detection when user searches on a specific tab with 0 results
-  // but matches exist in other categories (e.g. searching "NATURALEZA Y PAISAJE" in 'Libro Posgrado')
   const crossCategoryMatches = useMemo(() => {
     const query = deferredSearchTerm.trim();
     const isCategoryTodos = selectedCategory.toUpperCase() === 'TODOS';
@@ -307,8 +296,6 @@ export default function App() {
 
   const bestCrossCategoryMatch = crossCategoryMatches.length > 0 ? crossCategoryMatches[0].record : null;
 
-  // Sort search results:
-  // TODA BÚSQUEDA Y LISTADO SE ORDENA POR EL AÑO MÁS RECIENTE (2026, 2025, 2024...)
   const sortedSearchResults = useMemo(() => {
     const list = [...searchEvaluatedRecords];
 
@@ -321,7 +308,6 @@ export default function App() {
       });
     }
 
-    // Default & 'year-desc': Siempre ordenar desde el año más reciente de forma descendente (priorizando coincidencias exactas)
     return list.sort((a, b) => {
       const isExactA = a.score >= 10000;
       const isExactB = b.score >= 10000;
@@ -336,7 +322,6 @@ export default function App() {
     });
   }, [searchEvaluatedRecords, sortBy]);
 
-  // Check if classification search yielded only alternative (prefix/fallback) results
   const isClassificationQuery =
     searchScope === 'classification' ||
     (deferredSearchTerm.includes('/') && /\d/.test(deferredSearchTerm));
@@ -363,7 +348,6 @@ export default function App() {
     return query;
   }, [deferredSearchTerm]);
 
-  // Reset page to 1 when filters or search change
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -375,136 +359,11 @@ export default function App() {
     itemsPerPage,
   ]);
 
-  // Pagination calculations: 40 on PC, 10 on mobile
   const totalPages = Math.ceil(sortedSearchResults.length / itemsPerPage) || 1;
   const paginatedResults = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return sortedSearchResults.slice(start, start + itemsPerPage);
   }, [sortedSearchResults, currentPage, itemsPerPage]);
-
-  // Handlers for Database Operations
-  const handleImportExcelRecords = (newRecords: BibliographicRecord[], replaceMode: boolean) => {
-    // Normalize all incoming records strictly into the 6 official types
-    const cleanRecords = newRecords.map((r) => ({
-      ...r,
-      materialType: mapToOfficialMaterialType(r.materialType, r.classification, r.title),
-    }));
-
-    if (replaceMode) {
-      setRecords(cleanRecords);
-    } else {
-      // Accumulate & merge: keep all existing records, update matches by MFN or append new ones
-      setRecords((prev) => {
-        const existingMap = new Map<string, BibliographicRecord>();
-        prev.forEach((r) => {
-          const key = String(r.mfn || r.id).trim();
-          existingMap.set(key, r);
-        });
-
-        cleanRecords.forEach((nr) => {
-          const key = String(nr.mfn || nr.id).trim();
-          if (existingMap.has(key)) {
-            const existing = existingMap.get(key)!;
-            // Merge copies without duplicate barcodes
-            const mergedCopies = [...(existing.copies || [])];
-            (nr.copies || []).forEach((c) => {
-              if (!mergedCopies.some((mc) => mc.barcode === c.barcode)) {
-                mergedCopies.push(c);
-              }
-            });
-            existingMap.set(key, {
-              ...existing,
-              ...nr,
-              copies: mergedCopies.length > 0 ? mergedCopies : nr.copies,
-              updatedAt: new Date().toISOString(),
-            });
-          } else {
-            existingMap.set(key, nr);
-          }
-        });
-
-        return Array.from(existingMap.values());
-      });
-    }
-
-    setNotification(`¡Importación exitosa! Se procesaron ${cleanRecords.length} registros bibliográficos.`);
-    setTimeout(() => setNotification(null), 6000);
-  };
-
-  const handleSaveJsonDatabase = (updatedRecords: BibliographicRecord[]) => {
-    const cleanRecords = updatedRecords.map((r) => ({
-      ...r,
-      materialType: mapToOfficialMaterialType(r.materialType, r.classification, r.title),
-    }));
-    setRecords(cleanRecords);
-  };
-
-  const handleSaveSingleRecord = (record: BibliographicRecord) => {
-    setRecords((prev) => {
-      const existsIndex = prev.findIndex((r) => r.id === record.id);
-      if (existsIndex >= 0) {
-        const next = [...prev];
-        next[existsIndex] = record;
-        return next;
-      } else {
-        return [...prev, record];
-      }
-    });
-  };
-
-  const handleDeleteRecord = (id: string) => {
-    if (confirm('¿Estás seguro de que deseas eliminar este registro bibliográfico MFN?')) {
-      setRecords((prev) => prev.filter((r) => r.id !== id));
-    }
-  };
-
-  const handleOpenEdit = (rec: BibliographicRecord) => {
-    setRecordToEdit(rec);
-    setIsRecordModalOpen(true);
-  };
-
-  const handleOpenNew = () => {
-    setRecordToEdit(null);
-    setIsRecordModalOpen(true);
-  };
-
-  const handleOpenViewSingleJson = (rec: BibliographicRecord) => {
-    setRecordToViewJson(rec);
-    setIsSingleJsonModalOpen(true);
-  };
-
-  const toggleSelectRecord = (id: string) => {
-    setSelectedRecordIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const handleSelectCurrentPage = () => {
-    setSelectedRecordIds((prev) => {
-      const next = new Set(prev);
-      const allInPageSelected = paginatedResults.length > 0 && paginatedResults.every((r) => next.has(r.record.id));
-      if (allInPageSelected) {
-        paginatedResults.forEach((r) => next.delete(r.record.id));
-      } else {
-        paginatedResults.forEach((r) => next.add(r.record.id));
-      }
-      return next;
-    });
-  };
-
-  const handleSelectAllResults = () => {
-    setSelectedRecordIds(new Set(sortedSearchResults.map((r) => r.record.id)));
-  };
-
-  const handleClearSelection = () => {
-    setSelectedRecordIds(new Set());
-  };
 
   const handleExportToExcel = () => {
     const isExportingSelected = selectedRecordIds.size > 0;
@@ -524,10 +383,6 @@ export default function App() {
     exportRecordsToExcel(recordsToExport, filename);
   };
 
-  const handleDownloadFullBackup = () => {
-    downloadJsonDatabase(activeRecords, 'catalogo_bibliografico_unife_2_backup.json');
-  };
-
   const handleResetFilters = () => {
     setSearchTerm('');
     setSelectedCategory('TODOS');
@@ -544,6 +399,18 @@ export default function App() {
     sortBy !== 'default'
   );
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#f3f4f6] flex flex-col items-center justify-center p-4 font-sans">
+        <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center space-y-4 max-w-sm w-full text-center border border-gray-100">
+          <div className="w-12 h-12 border-4 border-[#00a651] border-t-transparent rounded-full animate-spin"></div>
+          <h2 className="text-lg font-bold text-gray-800">Cargando Catálogo UNIFÉ...</h2>
+          <p className="text-xs text-gray-500">Preparando más de 52,000 registros bibliográficos. Esto puede tomar unos segundos.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f3f4f6] text-gray-900 flex flex-col font-sans selection:bg-emerald-200 selection:text-emerald-900 relative">
       {notification && (
@@ -551,19 +418,15 @@ export default function App() {
           <span>{notification}</span>
           <button
             onClick={() => setNotification(null)}
-            className="text-white/80 hover:text-white font-bold text-lg leading-none ml-2"
+            className="text-white/80 hover:text-white font-bold text-lg leading-none ml-2 cursor-pointer"
           >
             ×
           </button>
         </div>
       )}
 
-      {/* 1. Header with UNIFÉ seal and title */}
-      <Header
-        totalRecords={activeRecords.length}
-      />
+      <Header totalRecords={activeRecords.length} />
 
-      {/* 2. Material Categories Filter Carousel (Excluding Libro Digital & Revista Impresa) */}
       <MaterialFilterTabs
         categories={availableCategories}
         selectedCategory={selectedCategory}
@@ -571,7 +434,6 @@ export default function App() {
         categoryCounts={categoryCounts}
       />
 
-      {/* 3. Search Bar with Elasticsearch scope and legend */}
       <SearchBar
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -586,7 +448,6 @@ export default function App() {
         isFiltered={isFiltered}
       />
 
-      {/* 4. Active descriptor filter alert (if clicked) */}
       {selectedDescriptor && (
         <div className="bg-amber-100 border-b border-amber-300 px-4 py-2 text-xs text-amber-900 flex items-center justify-between">
           <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
@@ -603,9 +464,7 @@ export default function App() {
         </div>
       )}
 
-      {/* 5. Main Content Area (Centrado en web y con ancho óptimo) */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 space-y-4">
-        {/* Results Counter Banner & Selection Toolbar matching UNIFÉ UI */}
         <div className="flex flex-wrap items-center justify-between gap-3 text-[12px] sm:text-sm text-gray-700 pb-1">
           <div className="flex items-center gap-2">
             <span className="font-normal text-gray-700">
@@ -631,13 +490,22 @@ export default function App() {
           </div>
         </div>
 
-        {/* Selection & Export to Excel Toolbar */}
         <div className="bg-white border border-gray-200 rounded-xl p-2.5 sm:p-3 flex flex-wrap items-center justify-between gap-2.5 shadow-2xs">
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-[11px] sm:text-[13px]">
             <button
-              onClick={handleSelectCurrentPage}
+              onClick={() => {
+                setSelectedRecordIds((prev) => {
+                  const next = new Set(prev);
+                  const allInPageSelected = paginatedResults.length > 0 && paginatedResults.every((r) => next.has(r.record.id));
+                  if (allInPageSelected) {
+                    paginatedResults.forEach((r) => next.delete(r.record.id));
+                  } else {
+                    paginatedResults.forEach((r) => next.add(r.record.id));
+                  }
+                  return next;
+                });
+              }}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 hover:border-[#00a651] hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 font-medium transition-colors cursor-pointer select-none text-[11px] sm:text-[13px]"
-              title="Seleccionar o deseleccionar los títulos de esta página para exportar a Excel"
             >
               {paginatedResults.length > 0 && paginatedResults.every((r) => selectedRecordIds.has(r.record.id)) ? (
                 <CheckSquare className="w-3.5 h-3.5 text-[#00a651]" />
@@ -649,9 +517,8 @@ export default function App() {
 
             {sortedSearchResults.length > paginatedResults.length && (
               <button
-                onClick={handleSelectAllResults}
+                onClick={() => setSelectedRecordIds(new Set(sortedSearchResults.map((r) => r.record.id)))}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-gray-300 hover:border-[#00a651] hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 font-medium transition-colors cursor-pointer select-none text-[11px] sm:text-[13px]"
-                title="Seleccionar todos los resultados para exportar a Excel"
               >
                 <CheckSquare className="w-3.5 h-3.5 text-[#00a651]" />
                 <span>Seleccionar todos ({sortedSearchResults.length})</span>
@@ -660,7 +527,7 @@ export default function App() {
 
             {selectedRecordIds.size > 0 && (
               <button
-                onClick={handleClearSelection}
+                onClick={() => setSelectedRecordIds(new Set())}
                 className="text-[11px] sm:text-xs text-red-600 hover:text-red-700 hover:underline font-medium cursor-pointer pl-1"
               >
                 Limpiar selección ({selectedRecordIds.size})
@@ -672,11 +539,6 @@ export default function App() {
             <button
               onClick={handleExportToExcel}
               className="bg-[#00a651] hover:bg-[#008c44] text-white text-[11px] sm:text-[13px] font-bold px-3 py-1.5 rounded-lg shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-              title={
-                selectedRecordIds.size > 0
-                  ? `Descargar archivo Excel (.xlsx) con los ${selectedRecordIds.size} títulos seleccionados`
-                  : `Descargar archivo Excel (.xlsx) con los ${sortedSearchResults.length} resultados`
-              }
             >
               <FileSpreadsheet className="w-4 h-4 text-white shrink-0" />
               <span>
@@ -688,7 +550,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Alternative Classification Notice Banner */}
         {hasOnlyAlternativeClassificationMatches && (
           <div className="bg-amber-50/90 border border-amber-300 rounded-xl p-3.5 sm:p-4 text-amber-950 space-y-1 text-xs sm:text-sm shadow-2xs">
             <div className="font-bold text-amber-900 flex items-center gap-2">
@@ -701,7 +562,6 @@ export default function App() {
           </div>
         )}
 
-        {/* 6. List of Bibliographic MFN Cards */}
         {paginatedResults.length > 0 ? (
           <div className="space-y-4">
             {paginatedResults.map((matchItem, idx) => (
@@ -713,27 +573,35 @@ export default function App() {
                 semanticTerms={matchItem.semanticTerms}
                 isSelected={selectedRecordIds.has(matchItem.record.id)}
                 isAdminMode={isAdminMode}
-                onToggleSelect={toggleSelectRecord}
-                onEdit={handleOpenEdit}
-                onDelete={handleDeleteRecord}
-                onViewJson={handleOpenViewSingleJson}
+                onToggleSelect={(id) => {
+                  setSelectedRecordIds((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(id)) next.delete(id);
+                    else next.add(id);
+                    return next;
+                  });
+                }}
+                onEdit={(rec) => {
+                  setRecordToEdit(rec);
+                  setIsRecordModalOpen(true);
+                }}
+                onDelete={(id) => {
+                  if (confirm('¿Estás seguro de eliminar este registro?')) {
+                    setRecords((prev) => prev.filter((r) => r.id !== id));
+                  }
+                }}
+                onViewJson={(rec) => {
+                  setRecordToViewJson(rec);
+                  setIsSingleJsonModalOpen(true);
+                }}
                 onSelectDescriptor={(desc) => setSelectedDescriptor(desc)}
               />
             ))}
           </div>
         ) : (
-          /* Empty Search State with cross-category suggestion */
           <div className="bg-white rounded-xl border border-gray-200 p-8 sm:p-12 text-center space-y-5 shadow-xs">
-            <div
-              className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto ${
-                crossCategoryMatches.length > 0 ? 'bg-amber-100 text-amber-600 ring-4 ring-amber-50' : 'bg-gray-100 text-gray-400'
-              }`}
-            >
-              {crossCategoryMatches.length > 0 ? (
-                <Lightbulb className="w-8 h-8" />
-              ) : (
-                <Search className="w-8 h-8" />
-              )}
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto ${crossCategoryMatches.length > 0 ? 'bg-amber-100 text-amber-600 ring-4 ring-amber-50' : 'bg-gray-100 text-gray-400'}`}>
+              {crossCategoryMatches.length > 0 ? <Lightbulb className="w-8 h-8" /> : <Search className="w-8 h-8" />}
             </div>
 
             {crossCategoryMatches.length > 0 ? (
@@ -746,11 +614,7 @@ export default function App() {
                     <h4 className="text-[17px] font-bold text-amber-950 tracking-tight leading-snug">
                       {crossCategoryMatches.length === 1
                         ? `Se encontró 1 título en ${bestCrossCategoryMatch?.materialType || 'otro ítem'}`
-                        : `Se encontraron ${crossCategoryMatches.length} títulos en ${
-                            Array.from(new Set(crossCategoryMatches.map((m) => m.record.materialType))).length === 1
-                              ? bestCrossCategoryMatch?.materialType
-                              : 'otros ítems'
-                          }`}
+                        : `Se encontraron ${crossCategoryMatches.length} títulos en otros ítems`}
                     </h4>
                     <div className="space-y-1.5">
                       {crossCategoryMatches.slice(0, 3).map((matchItem) => (
@@ -793,11 +657,6 @@ export default function App() {
                 <h3 className="text-lg font-bold text-gray-800">
                   No se encontraron registros en la base de datos para este término
                 </h3>
-                {searchTerm && (
-                  <p className="text-xs sm:text-sm text-gray-500 max-w-md mx-auto mt-1">
-                    No hay coincidencias exactas ni semánticas para "{searchTerm}". Prueba con otros términos o limpia los filtros.
-                  </p>
-                )}
               </div>
             )}
 
@@ -812,7 +671,6 @@ export default function App() {
           </div>
         )}
 
-        {/* 7. Pagination Controls */}
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 pt-4 pb-8">
             <button
@@ -864,13 +722,12 @@ export default function App() {
         )}
       </main>
 
-      {/* Institutional Footer with Audience Counter */}
       <Footer
         totalRecords={activeRecords.length}
         onOpenExcelModal={() => setIsExcelModalOpen(true)}
+        visitorCount={105}
       />
 
-      {/* Floating Scroll to Top button */}
       <ScrollToTop />
     </div>
   );
