@@ -57,7 +57,7 @@ import {
   Upload,
 } from 'lucide-react';
 
-const ITEMS_PER_PAGE_DEFAULT = 30; // <--- Cambiado a 30 por página en PC
+const ITEMS_PER_PAGE_DEFAULT = 25; // <--- Cambiado a 30 por página en PC
 
 export default function App() {
   const [records, setRecords] = useState<BibliographicRecord[]>([]);
@@ -66,7 +66,7 @@ export default function App() {
   const [selectedRecordIds, setSelectedRecordIds] = useState<Set<string>>(new Set());
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
 
-  // Responsive device check: 30 on desktop/PC, 10 on mobile
+  // Responsive device check: 25 on desktop/PC, 10 on mobile
   const [isMobile, setIsMobile] = useState<boolean>(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -725,7 +725,7 @@ export default function App() {
       <Footer
         totalRecords={activeRecords.length}
         onOpenExcelModal={() => setIsExcelModalOpen(true)}
-        visitorCount={105}
+        visitorCount={1005}
       />
 
       <ScrollToTop />
